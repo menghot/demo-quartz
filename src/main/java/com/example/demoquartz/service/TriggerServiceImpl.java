@@ -35,9 +35,6 @@ public class TriggerServiceImpl implements TriggerService {
                 logger.debug("trigger paused success, trigger name:  {}, group: {}", triggerName, group);
             }
         } else {
-            if (logger.isDebugEnabled()) {
-                logger.debug("trigger not found trigger name:  {}, group: {}", triggerName, group);
-            }
             throw new SchedulerException("Trigger not found, triggerKey:" + triggerKey + ", group: " + group);
         }
     }
@@ -55,9 +52,6 @@ public class TriggerServiceImpl implements TriggerService {
                 logger.debug("trigger resumed success, trigger name:  {}, group: {}", triggerName, group);
             }
         } else {
-            if (logger.isDebugEnabled()) {
-                logger.debug("trigger not found trigger name:  {}, group: {}", triggerName, group);
-            }
             throw new SchedulerException("Trigger not found, triggerKey:" + triggerKey + ", group: " + group);
         }
     }

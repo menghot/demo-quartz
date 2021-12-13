@@ -41,9 +41,9 @@ public class Swagger3Config {
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-                .title("Swagger3")
+                .title("demo-quart api")
                 .description("Demo quartz swagger3 api")
-                .contact(new Contact("simon", "https://www.demo.com", "demo@gmail.com"))
+                .contact(new Contact("demo-quartz", "https://www.demo-quartz.com", "demo-quartz@gmail.com"))
                 .version("1.0")
                 .build();
     }

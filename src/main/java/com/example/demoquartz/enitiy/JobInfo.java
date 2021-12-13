@@ -14,12 +14,14 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(catalog = "scheduler", name = "scheduler_job_info")
+@Table(catalog = "scheduler", name = "job_info")
 public class JobInfo {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    private String schedulerName;
 
     private String jobName;
 
@@ -32,4 +34,6 @@ public class JobInfo {
     private Long repeatTime;
 
     private Boolean cronJob;
+
+    private String jobData;
 }
