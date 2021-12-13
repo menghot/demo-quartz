@@ -1,0 +1,13 @@
+# 查询指定job的所有triggr
+GET http://127.0.0.1:10100/jobs/simpleJob/DEFAULT/triggers
+Accept: application/json
+
+###
+# Resume 指定trigger
+POST http://127.0.0.1:10100/triggers/simpleJob_simpleTrigger2/DEFAULT/resume
+Accept: application/json
+
+###
+# pause 指定trigger
+POST http://127.0.0.1:10100/triggers/simpleJob_simpleTrigger2/DEFAULT/pause
+Accept: application/json

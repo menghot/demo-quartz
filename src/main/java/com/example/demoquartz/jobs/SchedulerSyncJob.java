@@ -17,9 +17,12 @@ public class SchedulerSyncJob extends QuartzJobBean {
 
     @Override
     protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
-        log.debug("SchedulerSyncJob begin... ");
-        log.debug(jobInfoService.getCurrentSchedulerJobInfos().toString());
-        log.debug("SchedulerSyncJob end");
-        //throw new RuntimeException("xxx");
+        log.info("SchedulerSyncJob begin... ");
+
+        if (log.isDebugEnabled()) {
+            log.debug(jobInfoService.getCurrentSchedulerJobInfos().toString());
+        }
+
+        log.info("SchedulerSyncJob end");
     }
 }
