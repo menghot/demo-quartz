@@ -56,8 +56,6 @@ public class DemoQuartzApplication {
 
                 scheduler.scheduleJob(trigger);
             }
-
-
         };
     }
 }
