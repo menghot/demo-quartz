@@ -1,37 +1,27 @@
 package com.example.demoquartz;
 
 import com.example.demoquartz.jobs.SimpleJob;
-import java.util.Date;
-import java.util.List;
-import org.quartz.DateBuilder;
+import com.github.xiaoymin.knife4j.spring.annotations.EnableKnife4j;
+import org.quartz.CronScheduleBuilder;
 import org.quartz.JobBuilder;
 import org.quartz.JobDetail;
-import org.quartz.JobExecutionContext;
 import org.quartz.JobKey;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
-import org.quartz.SimpleScheduleBuilder;
-import org.quartz.SimpleTrigger;
 import org.quartz.Trigger;
-import org.quartz.Trigger.CompletedExecutionInstruction;
 import org.quartz.TriggerBuilder;
-import org.quartz.TriggerKey;
-import org.quartz.TriggerListener;
-import org.quartz.impl.matchers.GroupMatcher;
-import org.quartz.listeners.BroadcastTriggerListener;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
-import org.springframework.scheduling.quartz.SimpleTriggerFactoryBean;
+import springfox.documentation.oas.annotations.EnableOpenApi;
 
+@EnableKnife4j
+@EnableOpenApi
 @SpringBootApplication
 public class DemoQuartzApplication {
-
-
 
     public static void main(String[] args) {
         SpringApplication.run(DemoQuartzApplication.class, args);
@@ -51,6 +41,7 @@ public class DemoQuartzApplication {
                                         "com.example.demoquartz.jobs.SimpleJob"))
                         .withIdentity("simpleJob")
                         .storeDurably()
+                        .usingJobData("trigger_type", "cron")
                         .usingJobData("name", "simon")
                         .usingJobData("age", "18")
                         .build();
@@ -58,22 +49,34 @@ public class DemoQuartzApplication {
                 scheduler.addJob(jobDetail, true);
             }
 
-            List<Trigger> triggers = (List<Trigger>) scheduler.getTriggersOfJob(jobKey);
-            if (triggers.isEmpty()) {
-				Trigger trigger = TriggerBuilder.newTrigger()
-						.withIdentity(jobKey.getName() + "_simpleTrigger")
-						.forJob(jobKey)
-						.startNow()
-						.withSchedule(SimpleScheduleBuilder
-								.simpleSchedule()
-								.withIntervalInSeconds(15)
-								.repeatForever())
-						.build();
-				scheduler.scheduleJob(trigger);
-			}
+            Trigger trigger = TriggerBuilder.newTrigger()
+                    .withIdentity(jobKey.getName() + "_simpleTrigger2")
+                    .forJob(jobKey)
+                    .startNow()
+                    .usingJobData("trigger_type", "cron")
+                    .withSchedule(CronScheduleBuilder
+                            .cronSchedule("*/5 * * * * ?")
+                            .withMisfireHandlingInstructionDoNothing())
+                    .build();
 
+            //scheduler.scheduleJob(trigger);
 
-
+//
+//            scheduler.resumeJob(new JobKey("simpleJob"));
+//
+//            List<Trigger> triggers = (List<Trigger>) scheduler.getTriggersOfJob(jobKey);
+//            if (triggers.isEmpty()) {
+//                Trigger trigger = TriggerBuilder.newTrigger()
+//                        .withIdentity(jobKey.getName() + "_simpleTrigger")
+//                        .forJob(jobKey)
+//                        .startNow()
+//                        .withSchedule(SimpleScheduleBuilder
+//                                .simpleSchedule()
+//                                .withIntervalInSeconds(15)
+//                                .repeatForever())
+//                        .build();
+//                scheduler.scheduleJob(trigger);
+//            }
 
 //			for (String groupName : scheduler.getJobGroupNames()) {
 //				for (JobKey jobKey : scheduler.getJobKeys(GroupMatcher.jobGroupEquals(groupName))) {
@@ -102,22 +105,22 @@ public class DemoQuartzApplication {
 //				}
 //			}
 
-                //schedulerFactoryBean.getScheduler().addJob(jobDetail, true);
-                //schedulerFactoryBean.getScheduler().scheduleJob(jobDetail, trigger);
+            //schedulerFactoryBean.getScheduler().addJob(jobDetail, true);
+            //schedulerFactoryBean.getScheduler().scheduleJob(jobDetail, trigger);
 
-                //System.out.println("job trigger size: " + schedulerFactoryBean.getScheduler().getTriggersOfJob(new JobKey("simpleJob")).size());
-                //schedulerFactoryBean.getScheduler().addJob(jobDetail, true);
-                //schedulerFactoryBean.getScheduler().triggerJob(new JobKey("simpleJob", "SIMPLE"));
-                //schedulerFactoryBean.getScheduler().unscheduleJob(new TriggerKey("simpleJob","SIMPLE"));
-            };
-        }
-
-        public JobKey runJob (Scheduler scheduler, String jobName) throws SchedulerException {
-            // if you don't call startAt() then the current time (immediately) is assumed.
-            Trigger runOnceTrigger = TriggerBuilder.newTrigger().build();
-            JobKey jobKey = new JobKey(jobName);
-            JobDetail job = JobBuilder.newJob(SimpleJob.class).withIdentity(jobKey).build();
-            scheduler.scheduleJob(job, runOnceTrigger);
-            return jobKey;
-        }
+            //System.out.println("job trigger size: " + schedulerFactoryBean.getScheduler().getTriggersOfJob(new JobKey("simpleJob")).size());
+            //schedulerFactoryBean.getScheduler().addJob(jobDetail, true);
+            //schedulerFactoryBean.getScheduler().triggerJob(new JobKey("simpleJob", "SIMPLE"));
+            //schedulerFactoryBean.getScheduler().unscheduleJob(new TriggerKey("simpleJob","SIMPLE"));
+        };
     }
+
+    public JobKey runJob(Scheduler scheduler, String jobName) throws SchedulerException {
+        // if you don't call startAt() then the current time (immediately) is assumed.
+        Trigger runOnceTrigger = TriggerBuilder.newTrigger().build();
+        JobKey jobKey = new JobKey(jobName);
+        JobDetail job = JobBuilder.newJob(SimpleJob.class).withIdentity(jobKey).build();
+        scheduler.scheduleJob(job, runOnceTrigger);
+        return jobKey;
+    }
+}
