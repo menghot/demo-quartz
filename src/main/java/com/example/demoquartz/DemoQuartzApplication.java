@@ -36,11 +36,10 @@ public class DemoQuartzApplication {
             JobDetail jobDetail = scheduler.getJobDetail(jobKey);
 
             if (jobDetail == null) {
-                jobDetail = JobBuilder.newJob(
-                                (Class<? extends QuartzJobBean>) Class.forName(
-                                        "com.example.demoquartz.jobs.SimpleJob"))
+                jobDetail = JobBuilder.newJob()
                         .withIdentity("simpleJob")
                         .storeDurably()
+                        .ofType(SimpleJob.class)
                         .usingJobData("trigger_type", "cron")
                         .usingJobData("name", "simon")
                         .usingJobData("age", "18")
