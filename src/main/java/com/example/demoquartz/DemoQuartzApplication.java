@@ -10,6 +10,7 @@ import org.quartz.Scheduler;
 import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
 import org.quartz.TriggerKey;
+import org.quartz.impl.triggers.CoreTrigger;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -26,11 +27,20 @@ public class DemoQuartzApplication {
         SpringApplication.run(DemoQuartzApplication.class, args);
     }
 
+    /**
+     * Start a scheduler to sync jobs from [job_info] to quartz engine, which will create or update
+     * quartz jobs and triggers
+     * <p>
+     * The synchronization job will run every 15 seconds by default
+     *
+     * @param schedulerFactoryBean
+     * @return
+     */
     @Bean
     public ApplicationRunner newRunner(SchedulerFactoryBean schedulerFactoryBean) {
         return args -> {
             Scheduler scheduler = schedulerFactoryBean.getScheduler();
-            JobKey jobKey = new JobKey("syncJob");
+            JobKey jobKey = new JobKey("syncJob", "DEFAULT");
             JobDetail jobDetail = scheduler.getJobDetail(jobKey);
             if (jobDetail == null) {
                 jobDetail = JobBuilder.newJob()
@@ -41,17 +51,19 @@ public class DemoQuartzApplication {
                 scheduler.addJob(jobDetail, true);
             }
 
-            TriggerKey triggerKey = new TriggerKey("syncJob");
-
-            Trigger trigger =  scheduler.getTrigger(triggerKey);
+            TriggerKey triggerKey = new TriggerKey("syncJob_trigger", "DEFAULT");
+            Trigger trigger = scheduler.getTrigger(triggerKey);
             if (trigger == null) {
+
+                CronScheduleBuilder triggerBuilder = CronScheduleBuilder
+                        .cronSchedule("*/15 * * * * ?")
+                        .withMisfireHandlingInstructionDoNothing();
+
                 trigger = TriggerBuilder.newTrigger()
                         .withIdentity(triggerKey)
                         .forJob(jobKey)
                         .startNow()
-                        .withSchedule(CronScheduleBuilder
-                                .cronSchedule("*/5 * * * * ?")
-                                .withMisfireHandlingInstructionDoNothing())
+                        .withSchedule(triggerBuilder)
                         .build();
 
                 scheduler.scheduleJob(trigger);

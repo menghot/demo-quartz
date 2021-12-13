@@ -1,5 +1,6 @@
 package com.example.demoquartz.enitiy;
 
+import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -36,4 +37,12 @@ public class JobInfo {
     private Boolean cronJob;
 
     private String jobData;
+
+    private Date createTime;
+
+    private Date updateTime;
+
+    private Integer state;
+
+    private String createUser;
 }
