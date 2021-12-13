@@ -22,6 +22,4 @@ public class JobInfoController {
     public ResponseEntity<List<JobInfo>> getCurrentSchedulerJobInfos() {
         return ResponseEntity.ok(jobInfoService.getCurrentSchedulerJobInfos());
     }
-
-
 }

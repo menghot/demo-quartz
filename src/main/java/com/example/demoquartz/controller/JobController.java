@@ -21,8 +21,9 @@ public class JobController {
 
     @Operation(summary = "Get job's triggers")
     @GetMapping("/jobs/{jobKey}/{group}/triggers")
-    ResponseEntity<List<Trigger>> triggers(@PathVariable String jobKey,@PathVariable String group)
+    ResponseEntity<List<Trigger>> triggers(@PathVariable String jobKey, @PathVariable String group)
             throws SchedulerException {
+
         return ResponseEntity.ok(jobService.getJobTriggers(jobKey, group));
     }
 }
