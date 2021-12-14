@@ -24,8 +24,10 @@ public class JobInfo {
 
     private String schedulerName;
 
+    // job
     private String jobName;
 
+    // job type
     private String jobGroup;
 
     private String jobClass;
@@ -45,4 +47,6 @@ public class JobInfo {
     private Integer state;
 
     private String createUser;
+
+    private String description;
 }
