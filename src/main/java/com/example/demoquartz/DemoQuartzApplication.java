@@ -39,6 +39,7 @@ public class DemoQuartzApplication {
     public ApplicationRunner newRunner(SchedulerFactoryBean schedulerFactoryBean) {
         return args -> {
             Scheduler scheduler = schedulerFactoryBean.getScheduler();
+
             JobKey jobKey = new JobKey("syncJob", "DEFAULT");
             JobDetail jobDetail = scheduler.getJobDetail(jobKey);
             if (jobDetail == null) {
