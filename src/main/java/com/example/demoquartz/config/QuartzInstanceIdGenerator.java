@@ -1,32 +1,34 @@
-package com.example.demoquartz;
+package com.example.demoquartz.config;
 
-import java.net.DatagramSocket;
 import java.net.Inet6Address;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
-import java.net.UnknownHostException;
 import java.util.Enumeration;
 import org.quartz.SchedulerException;
 import org.quartz.spi.InstanceIdGenerator;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.context.annotation.Configuration;
 
+/**
+ * This generator generate the instance id with the format "ip:port", like 192.168.10.2:8080
+ */
+@Configuration
 public class QuartzInstanceIdGenerator implements ApplicationContextAware, InstanceIdGenerator {
 
-    private static ApplicationContext applicationContext;
 
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        QuartzInstanceIdGenerator.applicationContext = applicationContext;
-    }
 
     @Override
     public String generateInstanceId() throws SchedulerException {
         return getIp() + ":" + applicationContext.getEnvironment().getProperty("server.port");
     }
 
+    /**
+     * Get host ip
+     * @return the prefect ipv4 ip, else return loop back ip(127.0.0.1) if no any host ip found.
+     */
     public static String getIp() {
         String ip = "127.0.0.1";
         try {
@@ -49,5 +51,12 @@ public class QuartzInstanceIdGenerator implements ApplicationContextAware, Insta
             throw new RuntimeException(e);
         }
         return ip;
+    }
+
+    private static ApplicationContext applicationContext;
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        QuartzInstanceIdGenerator.applicationContext = applicationContext;
     }
 }
