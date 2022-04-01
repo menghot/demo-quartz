@@ -30,6 +30,7 @@ public class SchedulerSyncJob extends QuartzJobBean {
         for (JobInfo jobInfo : jobInfos) {
             JobKey jobKey = new JobKey(jobInfo.getJobName(), jobInfo.getJobGroup());
             try {
+
                 if (schedulerFactoryBean.getScheduler().getJobDetail(jobKey) == null) {
                     addJobAndTrigger(jobInfo);
                 } else {

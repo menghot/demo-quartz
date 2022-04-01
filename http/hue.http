@@ -1,0 +1,60 @@
+# curl -X POST http://10.194.188.93:30676/api/token/auth -d 'username=demo&password=demo'
+POST http://10.194.188.93:30676/api/token/auth
+Content-Type: application/x-www-form-urlencoded
+
+username=demo&password=demo
+
+###
+
+# curl -X POST https://demo.gethue.com/api/token/verify/ -d 'token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjIxNjM4NTMxLCJqdGkiOiJhZjgwN2E0ZjBmZDI0ZWMxYWQ2NTUzZjEyMjIyYzU4YyIsInVzZXJfaWQiOjF9.dQ1P3hbzSytp9-o8bWlcOcwrdwRVy95M2Eolph92QMA'
+POST http://10.194.188.93:30676/api/token/verify/
+Content-Type: application/x-www-form-urlencoded
+
+token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjQwMjIzMjU4LCJqdGkiOiIxYjQ4NWQ4ODVmMGI0NzUzOTEzOGVlM2U1MTBkZTA0OCIsInVzZXJfaWQiOjF9.uWzTTfL0FjZ3J9RoDClfuE29BW_gQ7TLhN_6AEyWxbE
+
+###
+GET http://10.194.188.93:30676/api/connector/types
+Accept: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjQwMjIzMjU4LCJqdGkiOiIxYjQ4NWQ4ODVmMGI0NzUzOTEzOGVlM2U1MTBkZTA0OCIsInVzZXJfaWQiOjF9.uWzTTfL0FjZ3J9RoDClfuE29BW_gQ7TLhN_6AEyWxbE
+
+###
+POST http://10.194.188.93:30676/api/connector/instance/new/mysql/sqlalchemy
+Accept: application/json
+Authorization: Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNjM5MTkxNjQzLCJqdGkiOiI2MWI2ODNiNmE2ZWQ0ZjkzOWQ1Y2JmNTdmYmI1ZDU1ZiIsInVzZXJfaWQiOjF9.HMQBuSaP5iH2yRuZr7focZvOZolO8CtW4_6xuVO845g
+
+{
+   "nice_name": "MySQL8",
+   "dialect": "mysql",
+   "interface": "sqlalchemy",
+   "settings": [
+     {
+       "name": "url",
+       "value": "mysql://root:bmsoft@10.194.188.93:3306"
+     },
+     {
+       "name": "has_ssh",
+       "value": false
+     },
+     {
+      "name": "ssh_server_host",
+     "value": "127.0.0.1"
+     }
+   ],
+   "category": "editor",
+   "description": "",
+   "properties": {
+     "is_sql": true,
+     "sql_identifier_quote": "`",
+     "sql_identifier_comment_single": "--",
+     "has_catalog": true,
+     "has_database": true,
+     "has_table": true,
+     "has_live_queries": false,
+     "has_optimizer_risks": true,
+     "has_optimizer_values": true,
+     "has_auto_limit": false,
+     "has_reference_language": false,
+     "has_reference_functions": false,
+     "has_use_statement": false
+   }
+}
